@@ -9,7 +9,6 @@ import streamlit as st
 AZUL_MARINHO = "#2A5599"
 LARANJA = "#F26B2E"
 AZUL_CLARO = "#4FB3E0"
-CINZA_FUNDO = "#DADADA"
 
 st.set_page_config(page_title="Gerador de SQL Multi-Schema", page_icon=None, layout="wide")
 
@@ -34,9 +33,6 @@ st.markdown(
         }}
 
         /* Barra lateral */
-        section[data-testid="stSidebar"] {{
-            background-color: {CINZA_FUNDO};
-        }}
         section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {{
             color: {AZUL_MARINHO};
         }}
@@ -106,15 +102,6 @@ with st.sidebar:
         st.info("Nenhum banco de dados cadastrado ainda. Crie um abaixo.")
 
     banco_atual = st.selectbox("Banco de dados", options=bancos) if bancos else None
-
-    with st.expander("Criar novo banco de dados"):
-        novo_banco = st.text_input("Nome do banco de dados", key="novo_banco")
-        if st.button("Criar banco de dados", use_container_width=True):
-            nome = novo_banco.strip()
-            if nome and nome not in st.session_state.config:
-                st.session_state.config[nome] = []
-                salvar_config(st.session_state.config)
-                st.rerun()
 
     st.divider()
 
