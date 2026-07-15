@@ -10,7 +10,7 @@ AZUL_MARINHO = "#2A5599"
 LARANJA = "#F26B2E"
 AZUL_CLARO = "#4FB3E0"
 
-st.set_page_config(page_title="Gerador de SQL Multi-Schema", page_icon=None, layout="wide")
+st.set_page_config(page_title="Gerador de SQL", page_icon=None, layout="wide")
 
 st.markdown(
     f"""
@@ -34,7 +34,7 @@ st.markdown(
 
         /* Barra lateral */
         section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {{
-            color: {AZUL_MARINHO};
+            color: #FFFFFF;
         }}
 
         /* Correção de alinhamento: título/label alinhado com a caixa do campo */
@@ -63,7 +63,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("Gerador de SQL Multi-Schema")
+st.title("Gerador de SQL")
 st.caption(
     "Cole o SQL modelo usando {schema} no lugar do nome do schema. "
     "A ferramenta monta o UNION ALL para os schemas selecionados."
@@ -77,11 +77,6 @@ def carregar_config():
         with open(CONFIG_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
     return {}
-
-
-def salvar_config(config):
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-        json.dump(config, f, ensure_ascii=False, indent=4)
 
 
 if "config" not in st.session_state:
@@ -99,32 +94,11 @@ with st.sidebar:
     bancos = list(st.session_state.config.keys())
 
     if not bancos:
-        st.info("Nenhum banco de dados cadastrado ainda. Crie um abaixo.")
+        st.info("Nenhum banco de dados cadastrado. Adicione um no arquivo schemas_config.json.")
 
     banco_atual = st.selectbox("Banco de dados", options=bancos) if bancos else None
 
-    st.divider()
-
-    if banco_atual:
-        st.subheader(f"Schemas de {banco_atual}")
-
-        novo_schema = st.text_input("Adicionar schema(s) (separe por vírgula)", key="novo_schema")
-        if st.button("Adicionar schema", use_container_width=True):
-            for s in novo_schema.split(","):
-                s = s.strip().upper()
-                if s and s not in st.session_state.config[banco_atual]:
-                    st.session_state.config[banco_atual].append(s)
-            st.session_state.config[banco_atual].sort()
-            salvar_config(st.session_state.config)
-            st.rerun()
-
-        remover = st.multiselect("Remover schema(s)", st.session_state.config[banco_atual])
-        if st.button("Remover selecionados", use_container_width=True):
-            st.session_state.config[banco_atual] = [
-                s for s in st.session_state.config[banco_atual] if s not in remover
-            ]
-            salvar_config(st.session_state.config)
-            st.rerun()
+    st.caption("Bancos e schemas são cadastrados diretamente no arquivo schemas_config.json.")
 
 # ------------------------------------------------------------------
 # Área principal: montagem do SQL
