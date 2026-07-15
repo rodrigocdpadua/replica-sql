@@ -98,8 +98,6 @@ with st.sidebar:
 
     banco_atual = st.selectbox("Banco de dados", options=bancos) if bancos else None
 
-    st.caption("Bancos e schemas são cadastrados diretamente no arquivo schemas_config.json.")
-
 # ------------------------------------------------------------------
 # Área principal: montagem do SQL
 # ------------------------------------------------------------------
